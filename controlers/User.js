@@ -1,3 +1,5 @@
+const bcrypt = require("bcrypt");
+const serviceJWT = require("../services/serviceJWT")
 class User {
   static async registerHost(req, res) {
     var obj = {
@@ -59,12 +61,8 @@ class User {
     );
 
     if (obj.status == 201) {
-      const bcrypt = require("bcrypt");
-
-      console.log(req.body.password);
       const UX = await User.checkIfUserExist(req.body.email);
       if (UX == false) {
-        const bcrypt = require("bcrypt");
         req.body.password = await bcrypt.hashSync(req.body.password, 10);
         console.log(req.password);
         let userModel = require("../models").User;
@@ -93,6 +91,39 @@ class User {
       }
     }
     res.status(obj.status).json(obj);
+  }
+
+  static async loginHost(req, res) {
+    var obj = {
+      massageError: [],
+      massageSucces: '',
+      status: 200,
+      user: {
+        role: null,
+        firstName: null,
+        lastName: null,
+        email: null
+      },
+      token: ""
+    }
+    var { email, password } = req.body
+    var user = await User.getUser(email)
+    if (user != false) {
+      if (bcrypt.compareSync(password, user.password)) {
+        obj.massageSucces = "vous etre co"
+        obj.token = serviceJWT.generateTokenForUser(user)
+        obj.user.id = user.id
+        obj.user.role = user.role
+        obj.user.firstName = user.firstName
+        obj.user.lastName = user.lastName
+        obj.user.email = user.email
+      } else {
+        obj.status = 400
+        obj.massageError.push("le mot de passe ou/et l'email ne sont incorect")
+      }
+    }
+
+    res.status(obj.status).json(obj)
   }
 
   static checkIfInfoRensegned(champ, name, obj) {
@@ -126,6 +157,15 @@ class User {
     let userExist = await userModel.findOne({ where: { email: email } });
     if (userExist) {
       return true;
+    }
+    return false;
+  }
+
+  static async getUser(email) {
+    let userModel = require("../models").User;
+    let userExist = await userModel.findOne({ where: { email: email } });
+    if (userExist) {
+      return userExist;
     }
     return false;
   }
