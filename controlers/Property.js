@@ -13,7 +13,7 @@ class Property {
         if (isAut != false) {
             var userFinder = await user.findOne({ where: { email: isAut.email } })
             if (userFinder != null) {
-                const newProperty = await PropertyModels.create({ idUser: userFinder.dataValues.id, idCity: 3, nbRoom: 3, price: 400 })
+                const newProperty = await PropertyModels.create({ idUser: userFinder.dataValues.id, idCity: 3, nbRoom: req.body.nbRoom, price: req.body.price })
                 obj.messageSucces = "enregistrement reussi:)"
             } else {
                 obj.messageError.push("utilisateur introuvable!!!")

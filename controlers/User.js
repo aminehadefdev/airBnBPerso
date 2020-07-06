@@ -20,45 +20,11 @@ class User {
     const REGEX_PASSWORD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
     const REGEX_BIRTHDAY = /^([0-9]{4})\-([0-9]{2})\-([0-9]{2})$/;
 
-    User.checkIfInfoIsValid(
-      REGEX_EMAIL,
-      req.body.email,
-      obj,
-      "email",
-      " exemp jhon@do.com"
-    );
-
-    User.checkIfInfoIsValid(
-      REGEX_NAME,
-      req.body.firstName,
-      obj,
-      "firstName",
-      " il ne doit contenir que des lettre "
-    );
-
-    User.checkIfInfoIsValid(
-      REGEX_NAME,
-      req.body.lastName,
-      obj,
-      "lastName",
-      " il ne doit contenir que des lettre "
-    );
-
-    User.checkIfInfoIsValid(
-      REGEX_PASSWORD,
-      req.body.password,
-      obj,
-      "password",
-      " il doit contenir au moins 8 carecteaires dont une majuscule une miniscule un nombre ou chiffre et un carectaire special (/,@^)... que des lettre "
-    );
-
-    User.checkIfInfoIsValid(
-      REGEX_BIRTHDAY,
-      req.body.birthday,
-      obj,
-      "birthday",
-      "je te vois venir petit(e) malin(e)"
-    );
+    User.checkIfInfoIsValid(REGEX_EMAIL, req.body.email, obj, "email", " exemp jhon@do.com");
+    User.checkIfInfoIsValid(REGEX_NAME, req.body.firstName, obj, "firstName", " il ne doit contenir que des lettre ");
+    User.checkIfInfoIsValid(REGEX_NAME, req.body.lastName, obj, "lastName", " il ne doit contenir que des lettre ");
+    User.checkIfInfoIsValid(REGEX_PASSWORD, req.body.password, obj, "password", " il doit contenir au moins 8 carecteaires dont une majuscule une miniscule un nombre ou chiffre et un carectaire special (/,@^)... que des lettre ");
+    User.checkIfInfoIsValid(REGEX_BIRTHDAY, req.body.birthday, obj, "birthday", "je te vois venir petit(e) malin(e)");
 
     if (obj.status == 201) {
       const UX = await User.checkIfUserExist(req.body.email);
@@ -66,25 +32,8 @@ class User {
         req.body.password = await bcrypt.hashSync(req.body.password, 10);
         console.log(req.password);
         let userModel = require("../models").User;
-        const {
-          firstName,
-          lastName,
-          email,
-          password,
-          city,
-          description,
-          birthday,
-        } = req.body;
-        const newUser = await userModel.create({
-          firstName,
-          lastName,
-          email,
-          password,
-          city,
-          description,
-          birthday,
-          role: "host",
-        });
+        const { firstName, lastName, email, password, city, description, birthday, } = req.body;
+        const newUser = await userModel.create({ firstName, lastName, email, password, city, description, birthday, role: "host", });
         obj.massageSucces = "inscription reussi";
       } else {
         obj.massageError.push("Cet email est deje enregistrer");

@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "name": "Paris",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 2,
+    "name": "Dijon",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 3,
+    "name": "Rennes",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 4,
+    "name": "Bordeaux",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 5,
+    "name": "Marseille",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 6,
+    "name": "Montpellier",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 7,
+    "name": "Strasbourg",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 8,
+    "name": "Lille",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 9,
+    "name": "Lyon",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 10,
+    "name": "Nice",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 11,
+    "name": "Saint-Etienne",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 12,
+    "name": "Nantes",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 13,
+    "name": "Toulouse",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 14,
+    "name": "Brest",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  },
+  {
+    "id": 15,
+    "name": "Metz",
+    "createdAt": "1991-11-22",
+    "updatedAt": "1991-11-22"
+  }
+]
