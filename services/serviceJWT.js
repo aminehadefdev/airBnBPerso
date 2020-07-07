@@ -6,7 +6,8 @@ class serviceJWT {
     static generateTokenForUser(user) {
         return jwt.sign({
             email: user.email,
-            role: user.role
+            role: user.role,
+            id: user.id
         }, JWT_SIGN_SECRET, {
             expiresIn: "24h"
         })

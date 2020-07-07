@@ -12,7 +12,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       idCity: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        constraints: false,
       },
       nbRoom: {
         type: Sequelize.INTEGER

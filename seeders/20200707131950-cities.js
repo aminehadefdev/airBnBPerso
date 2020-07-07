@@ -1,6 +1,5 @@
 'use strict';
 const cities = require('./cities.json')
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
 
