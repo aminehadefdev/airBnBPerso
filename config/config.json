@@ -1,21 +1,25 @@
 {
   "development": {
     "username": "root",
-    "password": "root",
+    "password": "",
     "database": "airBnB_prso_development",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "root",
+    "password": "",
     "database": "airBnB_prso_test",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
+<<<<<<< HEAD
     "password": "root",
+=======
+    "password": "",
+>>>>>>> 008da23... on windows
     "database": "airBnB_prso_production",
     "host": "127.0.0.1",
     "dialect": "mysql"

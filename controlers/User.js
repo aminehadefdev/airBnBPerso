@@ -36,6 +36,10 @@ class User {
         const newUser = await userModel.create({ firstName, lastName, email, password, city, description, birthday, role: "host", });
         obj.massageSucces = "inscription reussi";
       } else {
+<<<<<<< HEAD
+=======
+        obj.status = 403
+>>>>>>> 008da23... on windows
         obj.massageError.push("Cet email est deje enregistrer");
       }
     }
@@ -113,6 +117,14 @@ class User {
   static async getUser(email) {
     let userModel = require("../models").User;
     let userExist = await userModel.findOne({ where: { email: email } });
+    if (userExist) {
+      return userExist;
+    }
+    return false;
+  }
+  static async getUserById(id){
+    let userModel = require("../models").User;
+    let userExist = await userModel.findOne({ where: { id: id } });
     if (userExist) {
       return userExist;
     }

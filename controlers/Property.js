@@ -11,21 +11,23 @@ class Property {
             status: 201,
             token: req.body.token
         }
-        var isAut = serviceJWT.UserIsAutorised(req.body.token)
-        if (isAut != false) {
-            var userFinder = await user.findOne({ where: { email: isAut.email } })
-            if (userFinder != null) {
-                var city = await CityCtl.findCityByName(req.body.city)
-                const newProperty = await PropertyModels.create({ idUser: userFinder.dataValues.id, idCity: city.dataValues.id, nbRoom: req.body.nbRoom, price: req.body.price })
-                obj.messageSucces = "enregistrement reussi:)"
-            } else {
-                obj.messageError.push("utilisateur introuvable!!!")
-                obj.status = 400
+        if(Property.checkIfInfoRensegned(req.body.city, "city", obj) && Property.checkIfInfoRensegned(req.body.nbRoom, "nbRoom", obj) &&Property.checkIfInfoRensegned(req.body.price, "price", obj)){
+            var cityId = await CityCtl.findCityByName(req.body.city)
+            cityId = cityId.id
+            const newProperty = await PropertyModels.create({ idUser: req.decoded.id, idCity: cityId, nbRoom: req.body.nbRoom, price: req.body.price })
+            obj.messageSucces = "enregistrement reussi:)"
+        }else{
+            Property.checkIfInfoRensegned(req.body.city, "city", obj)
+            Property.checkIfInfoRensegned(req.body.nbRoom, "nbRoom", obj)
+            Property.checkIfInfoRensegned(req.body.price, "price", obj)
+
+            const unique = (value, index, self) => {
+                return self.indexOf(value) === index
             }
-        } else {
-            obj.messageError.push("vous n'avez pas l'autorisation d'enregistrer une nouvelle proprieter!!!")
-            obj.status = 400
+
+            obj.messageError = obj.messageError.filter(unique)
         }
+
         res.status(obj.status).json(obj)
     }
 
@@ -37,23 +39,19 @@ class Property {
             status: 201,
         }
 
-        if (req.body.token != null || req.body.token != '' || req.body.token != undefined) {
-            var isAut = serviceJWT.UserIsAutorised(req.body.token)
-            if (isAut != false) {
-                obj.data = await PropertyModels.findAll({
-                    where: { idUser: isAut.id },
-                    include: [
-                        { model: CityModel }
-                    ]
-                })
-
-            } else {
-                obj.messageError.push('token pas cool')
-                obj.status = 400
-            }
-        }
-
         res.status(obj.status).json(obj)
+    }
+    static checkIfInfoRensegned(champ, name, obj) {
+        if (champ != null && champ != undefined && champ != "") {
+          if (obj.status == 400) {
+            return false;
+          }
+          obj.status = 201;
+          return true;
+        }
+        obj.messageError.push(`le chmap ${name} est obligatoir!`);
+        obj.status = 400;
+        return false;
     }
 }
 

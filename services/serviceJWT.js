@@ -13,13 +13,40 @@ class serviceJWT {
         })
     }
 
-    static UserIsAutorised(token) {
-        try {
-            return jwt.verify(token, JWT_SIGN_SECRET);
-        } catch (error) {
-            return false
+    static UserIsAutorised(req, res, next) {
+        var token = req.body.token
+        if (token.startsWith('Bearer ')) {
+            token = token.slice(7, token.length);
         }
+
+        if (token) {
+            jwt.verify(token, JWT_SIGN_SECRET, (err, decoded) => {
+              if (err) {
+                  console.log('nooooooooooooooooooop')
+                return res.json({
+                  success: false,
+                  message: 'Token is not valid'
+                });
+              } else {
+                req.decoded = decoded;
+                next();
+              }
+            });
+          } else {
+            return res.json({
+              success: false,
+              message: 'Auth token is not supplied'
+            });
+          }
     }
 }
 
 module.exports = serviceJWT;
+
+/**
+ * try {
+            return jwt.verify(JWT_SIGN_SECRET);
+        } catch (error) {
+            return false
+        }
+ */
