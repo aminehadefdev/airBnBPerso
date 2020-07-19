@@ -8,3 +8,5 @@
 * 6 lancer :
     * npx sequelize-cli db:migrate
     * npx sequelize-cli db:seed:all
+* 7 pour demarer le server lancer : 
+    * node ou nodemon /serverApi.js

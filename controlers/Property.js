@@ -1,6 +1,7 @@
 const userModel = require('../models').User
 const PropertyModels = require('../models').Property
 const CityModel = require('../models').Cities
+const bookingModel = require('../models/').Bookings
 
 const cityController = require('./City')
 
@@ -16,6 +17,16 @@ class Property {
             var cityId = await cityController.findCityByName(req.body.city)
             cityId = cityId.id
             const newProperty = await PropertyModels.create({ idUser: req.decoded.id, idCity: cityId, nbRoom: req.body.nbRoom, price: req.body.price })
+            if(req.body.bookings){
+                var bookings = req.body.bookings.split(',')
+                for(let i = 0; i < bookings.length; i++){
+                    var registerBooking = await bookingModel.create({
+                        availability : bookings[i],
+                        idProperty : newProperty.id,
+                        isBook : false,
+                    })
+                }
+            }
             obj.messageSucces = "enregistrement reussi:)"
         }else{
             Property.checkIfInfoRensegned(req.body.city, "city", obj)
