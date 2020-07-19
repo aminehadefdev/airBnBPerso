@@ -1,8 +1,9 @@
-const serviceJWT = require('../services/serviceJWT')
-const user = require('../models').User
+const userModel = require('../models').User
 const PropertyModels = require('../models').Property
-const CityCtl = require('./City')
 const CityModel = require('../models').Cities
+
+const cityController = require('./City')
+
 class Property {
     static async registerProperty(req, res) {
         var obj = {
@@ -11,8 +12,8 @@ class Property {
             status: 201,
             token: req.body.token
         }
-        if(Property.checkIfInfoRensegned(req.body.city, "city", obj) && Property.checkIfInfoRensegned(req.body.nbRoom, "nbRoom", obj) &&Property.checkIfInfoRensegned(req.body.price, "price", obj)){
-            var cityId = await CityCtl.findCityByName(req.body.city)
+        if(Property.checkIfInfoRensegned(req.body.city, "city", obj) && Property.checkIfInfoRensegned(req.body.nbRoom, "nbRoom", obj) && Property.checkIfInfoRensegned(req.body.price, "price", obj)){
+            var cityId = await cityController.findCityByName(req.body.city)
             cityId = cityId.id
             const newProperty = await PropertyModels.create({ idUser: req.decoded.id, idCity: cityId, nbRoom: req.body.nbRoom, price: req.body.price })
             obj.messageSucces = "enregistrement reussi:)"
@@ -24,7 +25,8 @@ class Property {
             const unique = (value, index, self) => {
                 return self.indexOf(value) === index
             }
-
+            
+            obj.status = 400
             obj.messageError = obj.messageError.filter(unique)
         }
 
@@ -42,7 +44,7 @@ class Property {
             attributes : ['nbRoom', 'price'],
             include: [
                 {model : CityModel, attributes : ['name']},
-                {model : user, attributes : ['firstName', 'lastName', 'email', 'city', "description", ]}
+                {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", ]}
             ],
             
         })

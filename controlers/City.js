@@ -1,11 +1,11 @@
-const CityModel = require('../models').Cities
+const cityModel = require('../models').Cities
 
 class City {
     static async findCityByName(name) {
-        return await CityModel.findOne({ where: { name: name }, attributes: { exclude: ['idCity'] } })
+        return await cityModel.findOne({ where: { name: name }, attributes: { exclude: ['idCity'] } })
     }
     static async findCityById(id) {
-        return await CityModel.findOne({ where: { id: id } })
+        return await cityModel.findOne({ where: { id: id } })
     }
 }
 
