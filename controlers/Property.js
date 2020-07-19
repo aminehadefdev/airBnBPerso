@@ -33,12 +33,14 @@ class Property {
 
     static async getProperties(req, res) {
         var obj = {
-            data: [],
+            data : {},
             messageError: [],
             messageSucces: '',
             status: 201,
         }
-
+        obj.data = await PropertyModels.findAll({
+            include: [{model : CityModel}],
+        })
         res.status(obj.status).json(obj)
     }
     static checkIfInfoRensegned(champ, name, obj) {

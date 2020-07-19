@@ -36,10 +36,7 @@ class User {
         const newUser = await userModel.create({ firstName, lastName, email, password, city, description, birthday, role: "host", });
         obj.massageSucces = "inscription reussi";
       } else {
-<<<<<<< HEAD
-=======
         obj.status = 403
->>>>>>> 008da23... on windows
         obj.massageError.push("Cet email est deje enregistrer");
       }
     }

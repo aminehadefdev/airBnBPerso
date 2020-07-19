@@ -15,11 +15,7 @@
   },
   "production": {
     "username": "root",
-<<<<<<< HEAD
-    "password": "root",
-=======
     "password": "",
->>>>>>> 008da23... on windows
     "database": "airBnB_prso_production",
     "host": "127.0.0.1",
     "dialect": "mysql"
