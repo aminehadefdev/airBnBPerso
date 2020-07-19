@@ -33,13 +33,18 @@ class Property {
 
     static async getProperties(req, res) {
         var obj = {
-            data : {},
+            data : [],
             messageError: [],
             messageSucces: '',
             status: 201,
         }
         obj.data = await PropertyModels.findAll({
-            include: [{model : CityModel}],
+            attributes : ['nbRoom', 'price'],
+            include: [
+                {model : CityModel, attributes : ['name']},
+                {model : user, attributes : ['firstName', 'lastName', 'email', 'city', "description", ]}
+            ],
+            
         })
         res.status(obj.status).json(obj)
     }

@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       Property.belongsTo(models.Cities, {
         foreignKey: 'idCity',
       });
+      Property.hasOne(models.User, {
+        foreignKey : 'id'
+      })
     }
   };
   Property.init({
