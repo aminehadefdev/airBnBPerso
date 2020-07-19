@@ -1,5 +1,8 @@
 const bcrypt = require("bcrypt");
 const serviceJWT = require("../services/serviceJWT")
+
+const userModel = require("../models").User
+
 class User {
   static async registerHost(req, res) {
     var obj = {
@@ -27,17 +30,15 @@ class User {
     User.checkIfInfoIsValid(REGEX_BIRTHDAY, req.body.birthday, obj, "birthday", "je te vois venir petit(e) malin(e)");
 
     if (obj.status == 201) {
-      const UX = await User.checkIfUserExist(req.body.email);
-      if (UX == false) {
+      const UserExist = await User.checkIfUserExist(req.body.email);
+      if (UserExist == false) {
         req.body.password = await bcrypt.hashSync(req.body.password, 10);
-        console.log(req.password);
-        let userModel = require("../models").User;
         const { firstName, lastName, email, password, city, description, birthday, } = req.body;
         const newUser = await userModel.create({ firstName, lastName, email, password, city, description, birthday, role: "host", });
         obj.massageSucces = "inscription reussi";
       } else {
         obj.status = 403
-        obj.massageError.push("Cet email est deje enregistrer");
+        obj.massageError.push("Ce mail est deje enregistrer");
       }
     }
     res.status(obj.status).json(obj);
@@ -46,7 +47,7 @@ class User {
   static async loginHost(req, res) {
     var obj = {
       massageError: [],
-      massageSucces: '',
+      massageSucces: null,
       status: 200,
       user: {
         role: null,
@@ -54,7 +55,7 @@ class User {
         lastName: null,
         email: null
       },
-      token: ""
+      token: null
     }
     var { email, password } = req.body
     var user = await User.getUser(email)
@@ -69,10 +70,9 @@ class User {
         obj.user.email = user.email
       } else {
         obj.status = 400
-        obj.massageError.push("le mot de passe ou/et l'email ne sont incorect")
+        obj.massageError.push("Informations incorectes")
       }
     }
-
     res.status(obj.status).json(obj)
   }
 
@@ -103,7 +103,6 @@ class User {
   }
 
   static async checkIfUserExist(email) {
-    let userModel = require("../models").User;
     let userExist = await userModel.findOne({ where: { email: email } });
     if (userExist) {
       return true;
@@ -112,7 +111,6 @@ class User {
   }
 
   static async getUser(email) {
-    let userModel = require("../models").User;
     let userExist = await userModel.findOne({ where: { email: email } });
     if (userExist) {
       return userExist;
@@ -120,7 +118,6 @@ class User {
     return false;
   }
   static async getUserById(id){
-    let userModel = require("../models").User;
     let userExist = await userModel.findOne({ where: { id: id } });
     if (userExist) {
       return userExist;
