@@ -8,4 +8,12 @@ module.exports = (app) => {
     app.get("/api/properties", (req, res) => {
         property.getProperties(req, res)
     });
+
+    app.get('/api/find/properties/by/city', (req, res)=>{
+        property.findPropertyByCity(req, res)
+    })
+
+    app.get('/api/find/properties/by/query/params', (req, res)=>{
+        property.findPropertyByQueryParams(req, res)
+    })
 };

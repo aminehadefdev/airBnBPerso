@@ -5,6 +5,8 @@ const bookingModel = require('../models/').Bookings
 
 const cityController = require('./City')
 
+const { Op } = require("sequelize");
+
 class Property {
     static async registerProperty(req, res) {
         var obj = {
@@ -43,7 +45,6 @@ class Property {
 
         res.status(obj.status).json(obj)
     }
-
     static async getProperties(req, res) {
         var obj = {
             data : [],
@@ -52,13 +53,69 @@ class Property {
             status: 201,
         }
         obj.data = await PropertyModels.findAll({
-            attributes : ['nbRoom', 'price'],
+            attributes : ['nbRoom', 'price', 'id'],
             include: [
                 {model : CityModel, attributes : ['name']},
-                {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", ]}
+                {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
+                {model : bookingModel, attributes : ["availability"]}
             ],
             
         })
+        res.status(obj.status).json(obj)
+    }
+    static async findPropertyByCity(req, res){
+        var obj = {
+            data : [],
+            messageError: [],
+            messageSucces: '',
+            status: 201,
+        }
+        
+        var idCity = await cityController.findCityByName(req.body.name)
+        idCity = idCity.id
+
+        obj.data = await PropertyModels.findAll({
+            where : {
+                idCity : idCity
+            },
+            attributes : ['nbRoom', 'price', 'id'],
+            include: [
+                {model : CityModel, attributes : ['name']},
+                {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
+                {model : bookingModel, attributes : ["availability"]}
+            ],
+            
+        })
+
+        res.status(obj.status).json(obj)
+    }
+    static async findPropertyByQueryParams(req, res){
+        var obj = {
+            data : [],
+            messageError: [],
+            messageSucces: '',
+            status: 201,
+        }
+        
+        //var idCity = await cityController.findCityByName(req.body.name)
+        //idCity = idCity.id
+
+        var params = req.query
+
+        if(params.dateMin){
+            params.dateMin = Date.parse(params.dateMin)
+        }
+        obj.data = await PropertyModels.findAll({
+            include: [
+                {model : CityModel, attributes : ['name']},
+                {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
+                {model : bookingModel, attributes : ["availability"], where : {
+                   
+                }}
+            ],
+            
+        })
+
         res.status(obj.status).json(obj)
     }
     static checkIfInfoRensegned(champ, name, obj) {
@@ -76,3 +133,10 @@ class Property {
 }
 
 module.exports = Property
+
+        //    attributes : ['nbRoom', 'price', 'id'],
+        //    include: [
+        //        {model : CityModel, attributes : ['name']},
+        //        {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
+        //        {model : bookingModel, attributes : ["availability"]}
+        //    ],
