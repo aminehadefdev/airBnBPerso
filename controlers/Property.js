@@ -96,21 +96,48 @@ class Property {
             messageSucces: '',
             status: 201,
         }
+
+        var nameCity = null
+        var availability = null
+
+        if(req.query.city){
+            nameCity = {
+                name : {
+                    [Op.eq] : req.query.city
+                }
+            }
+        }
+
+        if(req.query.dateMin || req.query.dateMax){
+            if(req.query.dateMin){
+                availability = {
+                    availability : {
+                        [Op.gte]: req.query.dateMin
+                    }
+                }
+            }
+            if(req.query.dateMax){
+                availability = {
+                    availability : {
+                        [Op.lte]: req.query.dateMax
+                    }
+                }
+            }
+            if(req.query.dateMin && req.query.dateMax){
+                availability = {
+                    availability : {
+                        [Op.gte]: req.query.dateMin,
+                        [Op.lte]: req.query.dateMax
+                    }
+                }
+            }
+        }
         
         obj.data = await PropertyModels.findAll({
             include: [
-                {model : CityModel, attributes : ['name'], where : {
-                    name : {
-                        [Op.eq] : 'Bordeaux'
-                    }
-                }},
+                {model : CityModel, attributes : ['name'], where : nameCity},
                 {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
-                {model : bookingModel, attributes : ["availability"], where : {
-                    availability : {
-                        [Op.gte]: '2021-01-10T00:00:00.000Z',
-                        [Op.lte]: '2022-12-10T00:00:00.000Z',
-                    }
-                }}
+                {model : bookingModel, attributes : ["availability"], where : availability}
             ],
             
         })
