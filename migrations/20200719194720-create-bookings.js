@@ -14,6 +14,9 @@ module.exports = {
       idProperty: {
         type: Sequelize.INTEGER
       },
+      idUser: {
+        type: Sequelize.INTEGER
+      },
       isBook: {
         type: Sequelize.BOOLEAN
       },

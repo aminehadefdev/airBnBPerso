@@ -97,20 +97,19 @@ class Property {
             status: 201,
         }
         
-        //var idCity = await cityController.findCityByName(req.body.name)
-        //idCity = idCity.id
-
-        var params = req.query
-
-        if(params.dateMin){
-            params.dateMin = Date.parse(params.dateMin)
-        }
         obj.data = await PropertyModels.findAll({
             include: [
-                {model : CityModel, attributes : ['name']},
+                {model : CityModel, attributes : ['name'], where : {
+                    name : {
+                        [Op.eq] : 'Bordeaux'
+                    }
+                }},
                 {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
                 {model : bookingModel, attributes : ["availability"], where : {
-                   
+                    availability : {
+                        [Op.gte]: '2021-01-10T00:00:00.000Z',
+                        [Op.lte]: '2022-12-10T00:00:00.000Z',
+                    }
                 }}
             ],
             
@@ -133,10 +132,3 @@ class Property {
 }
 
 module.exports = Property
-
-        //    attributes : ['nbRoom', 'price', 'id'],
-        //    include: [
-        //        {model : CityModel, attributes : ['name']},
-        //        {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
-        //        {model : bookingModel, attributes : ["availability"]}
-        //    ],
