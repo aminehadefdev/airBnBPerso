@@ -144,6 +144,28 @@ class Property {
 
         res.status(obj.status).json(obj)
     }
+    static async findPropertyById(req, res){
+        var obj = {
+            data : [],
+            messageError: [],
+            messageSucces: '',
+            status: 201,
+        }
+
+        if (Number.isInteger(parseInt(req.params.id))) {
+            obj.data = await PropertyModels.findOne({attributes : ['nbRoom', 'price', 'id'],
+            include: [
+                {model : CityModel, attributes : ['name']},
+                {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
+                {model : bookingModel, attributes : ["availability", 'id']}
+            ],
+            where : {id : parseInt(req.params.id)}})
+        }else{
+            obj.messageError.push('nop')
+        }
+
+        res.status(obj.status).json(obj)
+    }
     static checkIfInfoRensegned(champ, name, obj) {
         if (champ != null && champ != undefined && champ != "") {
           if (obj.status == 400) {
