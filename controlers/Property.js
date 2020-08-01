@@ -5,7 +5,7 @@ const bookingModel = require('../models/').Bookings
 
 const cityController = require('./City')
 
-const { Op } = require("sequelize");
+const { Op } = require("sequelize")
 
 class Property {
     static async registerProperty(req, res) {
@@ -57,7 +57,7 @@ class Property {
             include: [
                 {model : CityModel, attributes : ['name']},
                 {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
-                {model : bookingModel, attributes : ["availability"]}
+                {model : bookingModel, attributes : ["availability", "id"]}
             ],
             
         })
@@ -157,7 +157,11 @@ class Property {
             include: [
                 {model : CityModel, attributes : ['name']},
                 {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
-                {model : bookingModel, attributes : ["availability", 'id']}
+                {model : bookingModel, attributes : ["availability", 'id'], where : {
+                    isBook : {
+                        [Op.eq] : false
+                    }
+                }}
             ],
             where : {id : parseInt(req.params.id)}})
         }else{

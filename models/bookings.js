@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   Bookings.init({
     availability: DataTypes.DATE,
     idProperty: DataTypes.INTEGER,
-    isBook: DataTypes.BOOLEAN
+    isBook: DataTypes.BOOLEAN,
+    idUser : DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Bookings',
