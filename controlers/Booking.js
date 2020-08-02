@@ -16,6 +16,18 @@ class Booking {
         message : 'ok'
     })
    }
+   static async annulBook(req, res){
+
+    var book = await BookingsModel.update({
+            idUser: null,
+            isBook: false
+        },
+        {where: {id: req.params.id} }
+    )
+    res.status(201).json({
+        message : 'ok'
+    })
+   }
    static async collectionBookings(req, res){
        var idUser = req.decoded.id
        console.log(idUser)
@@ -28,6 +40,21 @@ class Booking {
         ],
        })
        res.status(201).json(collection)
+   }
+   static async collectionHoteBookings(req, res){
+
+    var idCurentUser = req.decoded.id
+    var collectionProperties = await PropertyModel.findAll({
+        where : {
+            idUser : idCurentUser
+        },
+        include: [
+            {model : BookingsModel, attributes : ["availability"], where : {isBook : true}, include : [
+                {model : UserModel, attributes: ['firstName', 'lastName', 'email', 'city', "description", "id"]}
+            ]}
+        ]
+    })
+    res.status(201).json(collectionProperties)
    }
 }
 

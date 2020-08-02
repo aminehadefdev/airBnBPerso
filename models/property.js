@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       Property.belongsTo(models.User, {
         foreignKey : 'idUser'
       })
+
+      Property.hasMany(models.Bookings, {
+        foreignKey: "idProperty"
+      })
     }
   };
   Property.init({
