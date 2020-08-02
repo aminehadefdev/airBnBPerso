@@ -15,4 +15,7 @@ module.exports = (app) => {
     app.get('/api/property/booking/liste', serviceJWT.UserIsAutorised, (req, res)=>{
         booking.collectionHoteBookings(req, res)
     })
+    app.get('/api/property/booking', serviceJWT.UserIsAutorised, (req, res)=>{
+        booking.onPropertyHoteBookings(req, res)
+    })
 };

@@ -56,6 +56,22 @@ class Booking {
     })
     res.status(201).json(collectionProperties)
    }
+   static async onPropertyHoteBookings(req, res){
+    var idCurentUser = req.decoded.id
+    var idProperty = req.query.idProperty
+    var Properties = await PropertyModel.findOne({
+        where : {
+            idUser : idCurentUser,
+            id : idProperty
+        },
+        include: [
+            {model : BookingsModel, attributes : ["availability"], where : {isBook : true}, include : [
+                {model : UserModel, attributes: ['firstName', 'lastName', 'email', 'city', "description", "id"]}
+            ]}
+        ]
+    })
+    res.status(201).json(Properties)
+   }
 }
 
 module.exports = Booking
