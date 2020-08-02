@@ -1,4 +1,6 @@
 const BookingsModel = require('../models/').Bookings
+const PropertyModel = require('../models/').Property
+const UserModel = require('../models/').User
 
 class Booking {
    static async book(req, res){
@@ -10,10 +12,22 @@ class Booking {
         },
         {where: {id: req.params.id} }
     )
-    console.log(book)
     res.status(201).json({
         message : 'ok'
     })
+   }
+   static async collectionBookings(req, res){
+       var idUser = req.decoded.id
+       console.log(idUser)
+       var collection = await BookingsModel.findAll({
+           where: {idUser: idUser},
+           include: [
+               {model : PropertyModel, include: [
+                   {model : UserModel, attributes: ['firstName', 'lastName', 'email', 'city', "description", "id"]}
+               ]}
+        ],
+       })
+       res.status(201).json(collection)
    }
 }
 
