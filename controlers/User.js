@@ -1,10 +1,12 @@
 const bcrypt = require("bcrypt");
 const serviceJWT = require("../services/serviceJWT")
 
+const helper = require('../services/helper')
+
 const userModel = require("../models").User
 
-class User {
-  static async registerHost(req, res) {
+class User extends helper {
+  static async register(req, res) {
     var obj = {
       status: 200,
       massageError: [],
@@ -44,7 +46,7 @@ class User {
     res.status(obj.status).json(obj);
   }
 
-  static async loginHost(req, res) {
+  static async login(req, res) {
     var obj = {
       massageError: [],
       massageSucces: null,
@@ -74,32 +76,6 @@ class User {
       }
     }
     res.status(obj.status).json(obj)
-  }
-
-  static checkIfInfoRensegned(champ, name, obj) {
-    if (champ != null && champ != undefined && champ != "") {
-      if (obj.status == 400) {
-        return false;
-      }
-      obj.status = 201;
-      return true;
-    }
-    obj.massageError.push(`le chmap ${name} est obligatoir!`);
-    obj.status = 400;
-    return false;
-  }
-
-  static checkIfInfoIsValid(regex, champ, obj, name, regle) {
-    if (regex.test(champ)) {
-      if (obj.status == 400) {
-        return false;
-      }
-      obj.status = 201;
-      return true;
-    }
-    obj.status = 400;
-    obj.massageError.push(`le champ ${name} est incorect ${regle}`);
-    return false;
   }
 
   static async checkIfUserExist(email) {

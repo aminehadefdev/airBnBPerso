@@ -4,4 +4,9 @@ module.exports = (app) => {
       message: "not found:(",
     });
   });
+  app.post("*", (req, res) => {
+    res.status(404).json({
+      message: "not found:(",
+    });
+  });
 };

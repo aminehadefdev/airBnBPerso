@@ -3,11 +3,13 @@ const PropertyModels = require('../models').Property
 const CityModel = require('../models').Cities
 const bookingModel = require('../models/').Bookings
 
+const helper = require('../services/helper')
+
 const cityController = require('./City')
 
 const { Op } = require("sequelize")
 
-class Property {
+class Property extends helper {
     static async registerProperty(req, res) {
         var obj = {
             messageError: [],
@@ -57,7 +59,7 @@ class Property {
             include: [
                 {model : CityModel, attributes : ['name']},
                 {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
-                {model : bookingModel, attributes : ["availability", "id"]}
+                {model : bookingModel, attributes : ["availability", "id"], where : {isBook : false}}
             ],
             
         })
@@ -82,7 +84,7 @@ class Property {
             include: [
                 {model : CityModel, attributes : ['name']},
                 {model : userModel, attributes : ['firstName', 'lastName', 'email', 'city', "description", "id"]},
-                {model : bookingModel, attributes : ["availability"]}
+                {model : bookingModel, attributes : ["availability"], where : {isBook : false}}
             ],
             
         })
@@ -112,7 +114,7 @@ class Property {
             if(req.query.dateMin){
                 availability = {
                     availability : {
-                        [Op.gte]: req.query.dateMin
+                        [Op.gte]: req.query.dateMin,
                     }
                 }
             }
@@ -169,18 +171,6 @@ class Property {
         }
 
         res.status(obj.status).json(obj)
-    }
-    static checkIfInfoRensegned(champ, name, obj) {
-        if (champ != null && champ != undefined && champ != "") {
-          if (obj.status == 400) {
-            return false;
-          }
-          obj.status = 201;
-          return true;
-        }
-        obj.messageError.push(`le chmap ${name} est obligatoir!`);
-        obj.status = 400;
-        return false;
     }
 }
 
